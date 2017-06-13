@@ -1,0 +1,27 @@
+version: '2'
+networks:
+  app_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.2.0/24
+        gateway: 172.16.2.1
+services:
+  nodejsdev:
+    build:
+      context: .
+      args:
+        PKGJSON: "package.json"
+    command: npm start
+    image: nodejslocaldev
+    container_name: nodejslocaldev
+    tty: true
+    ports:
+      - "49160:3000"
+    volumes:
+      - /usr/src/app/node_modules
+      - "./:/usr/src/app"
+    networks:
+      app_net:
+        ipv4_address: 172.16.2.4
